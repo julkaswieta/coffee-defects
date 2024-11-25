@@ -3,6 +3,7 @@ import torchvision
 import time
 import copy
 import os
+import csv
 from torchvision import models, transforms, datasets
 from torch import nn, optim
 from torch.utils.data import DataLoader
@@ -15,7 +16,8 @@ mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
 
 # select the device the model training will run on
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda")
+print(device)
 
 
 # Define the transforms for the images in the dataset
@@ -56,18 +58,7 @@ for param in model.parameters():
 # the number of features that the current FC was accepting
 input_features = model.fc.in_features
 
-model.fc = nn.Sequential(
-    nn.Linear(input_features, 256),
-    nn.ReLU(),
-    nn.Dropout(),
-    nn.Linear(256, 128),
-    nn.ReLU(),
-    nn.Dropout(),
-    nn.Linear(128, 64),
-    nn.ReLU(),
-    nn.Dropout(),
-    nn.Linear(64, 4)
-)
+model.fc = nn.Linear(input_features, 4)
 
 # Choose optimizer, criterion and scheduler
 optimizer = optim.SGD(model.fc.parameters(), lr=0.001)
@@ -130,6 +121,12 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
+            
+            with open("resnet-output4.csv", mode = "a", newline="") as file:
+                writer = csv.writer(file)
+                # Epoch, phase, loss, accuracy
+                formatted_accuracy = "{:.4f}".format(epoch_acc)
+                writer.writerows([[epoch, phase, epoch_loss, formatted_accuracy]]) 
 
             # deep copy the model
             if phase == 'valid' and epoch_acc > best_acc:
@@ -145,9 +142,11 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
     # load best model weights
     model.load_state_dict(best_model_wts)
+    torch.save(model.state_dict(), "trained_cnn.pt")
+
     return model
 
 
-epochs = 1
+epochs = 25
 
 model = train_model(model, criterion, optimizer, scheduler, epochs)
