@@ -1,0 +1,13 @@
+train: C:\Users\julka\repos\coffee-defects\datasets\train\images
+val: C:\Users\julka\repos\coffee-defects\datasets\valid\images
+test: C:\Users\julka\repos\coffee-defects\datasets\train\images
+
+nc: 4
+names: ['defect', 'longberry', 'peaberry', 'premium']
+
+roboflow:
+  workspace: coffee-vhnrv
+  project: usk-coffe-segmentasi-4os02
+  version: 1
+  license: BY-NC-SA 4.0
+  url: https://universe.roboflow.com/coffee-vhnrv/usk-coffe-segmentasi-4os02/dataset/1
