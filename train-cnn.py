@@ -37,7 +37,7 @@ data_transforms = {
 }
 
 # Load in the data
-data_directory = "./converted_dataset"
+data_directory = "./datasets/converted_dataset"
 
 image_datasets = {x: ImageFolder(os.path.join(data_directory, x),
                                  data_transforms[x])
@@ -121,12 +121,13 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
-            
-            with open("resnet-output4.csv", mode = "a", newline="") as file:
+
+            with open("resnet-output4.csv", mode="a", newline="") as file:
                 writer = csv.writer(file)
                 # Epoch, phase, loss, accuracy
                 formatted_accuracy = "{:.4f}".format(epoch_acc)
-                writer.writerows([[epoch, phase, epoch_loss, formatted_accuracy]]) 
+                writer.writerows(
+                    [[epoch, phase, epoch_loss, formatted_accuracy]])
 
             # deep copy the model
             if phase == 'valid' and epoch_acc > best_acc:

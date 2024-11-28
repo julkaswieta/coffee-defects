@@ -1,6 +1,6 @@
-train: C:\Users\julka\repos\coffee-defects\datasets\train\images
-val: C:\Users\julka\repos\coffee-defects\datasets\valid\images
-test: C:\Users\julka\repos\coffee-defects\datasets\train\images
+train: .\train\images
+val: .\valid\images
+test: .\test\images
 
 nc: 4
 names: ['defect', 'longberry', 'peaberry', 'premium']
