@@ -7,6 +7,7 @@ import time
 image_path = "datasets/multiple_beans_test/multi-16-24.jpg"
 output_folder = "outputs" + str(int(time.time()))
 detect_model = YOLO("models/bean_defect_detect.pt")
+classify_model = YOLO("runs\\classify\\train7\\weights\\best.pt")
 
 
 def detect_beans(model, image, imgsz):
@@ -44,7 +45,7 @@ def process_single_beans():
     for image in os.listdir(output_folder):
         img_path = os.path.join(output_folder, image)
         # the point is to replace this with a classification model
-        results = detect_beans(detect_model, img_path, 480)
+        results = detect_beans(classify_model, img_path, 256)
         if results and results[0].boxes:  # Ensure results and boxes are not empty
             # Get the class name of the first detected object
             class_id = results[0].boxes[0].cls[0].item()
