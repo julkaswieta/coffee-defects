@@ -1,3 +1,5 @@
 yolov8m.pt
 yolov8s.pt
+yolov8m-cls.pt
 outputs*
+runs
