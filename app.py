@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
 from app_helpers import *
+import os
+import threading
 
 window_width = 800
 window_height = 600
@@ -35,7 +36,7 @@ header_frame.pack(
 
 body_frame.pack(
     pady=(0, main_frames_padding),
-    padx=main_frames_padding, fill="both")
+    padx=main_frames_padding, fill="both", expand=True)
 
 # Header frame fill
 # Logo
@@ -75,9 +76,37 @@ process_frame = tk.Frame(body_frame, width=0.2 * body_frame.winfo_width(),
                          height=body_frame.winfo_height(), bg="#d1c4ab", padx=20)
 process_frame.pack(side=tk.LEFT, fill="y")
 
-process_btn = tk.Button(process_frame, text="Detect defects",
-                        command=lambda: detect_defects(placeholder_path.get()))
+process_btn = tk.Button(
+    process_frame,
+    text="Detect defects"
+)
 process_btn.pack(pady=50, fill="both")
 
-# Run the App
+# Output display
+# Scrollable canvas setup
+canvas = tk.Canvas(body_frame, bg="#d1c4ab")
+canvas.pack(side=tk.LEFT, fill="both", expand=True)
+
+scrollbar = ttk.Scrollbar(body_frame, orient="vertical", command=canvas.yview)
+scrollbar.pack(side=tk.RIGHT, fill="y")
+
+canvas.configure(yscrollcommand=scrollbar.set)
+
+# Bind canvas to update the scroll region
+canvas.bind(
+    "<Configure>",
+    lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+)
+
+# The output frame inside the canvas
+output_frame = tk.Frame(canvas, bg="#d1c4ab", padx=20)
+canvas.create_window((0, 0), window=output_frame, anchor="nw")
+
+# add the command to the process button
+process_btn.config(command=lambda: threading.Thread(
+    target=detect_defects,
+    args=(placeholder_path.get(), output_frame),
+    daemon=True
+).start())
+
 window.mainloop()
