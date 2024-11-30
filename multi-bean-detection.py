@@ -4,10 +4,10 @@ import cv2
 import time
 
 # Upload image
-image_path = "datasets/multiple_beans_test/multi-16-24.jpg"
+image_path = "datasets/multiple_beans_test/multi-9-24.jpg"
 output_folder = "outputs" + str(int(time.time()))
 detect_model = YOLO("models/bean_defect_detect.pt")
-classify_model = YOLO("runs\\classify\\train7\\weights\\best.pt")
+classify_model = YOLO("models/defect_classify_yolo.pt")
 
 
 def detect_beans(model, image, imgsz):
@@ -59,4 +59,4 @@ def process_single_beans():
 results = detect_beans(detect_model, image_path, 1024)
 results[0].show()
 crop_beans(results)
-process_single_beans()
+# process_single_beans()
