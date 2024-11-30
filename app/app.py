@@ -40,7 +40,7 @@ body_frame.pack(
 
 # Header frame fill
 # Logo
-logo_img = import_image("logo.png", header_height)
+logo_img = import_image("app/imgs/logo.png", header_height)
 logo = tk.Label(header_frame, image=logo_img, bg="#d1c4ab")
 logo.grid(row=0, column=0, rowspan=2)
 
@@ -60,7 +60,7 @@ img_selection_frame = tk.Frame(
     body_frame, width=(0.4 * body_frame.winfo_width()), height=body_frame.winfo_height(), bg="#d1c4ab")
 img_selection_frame.pack(side=tk.LEFT, fill="y")
 
-placeholder_path = tk.StringVar(window, value="placeholder.png")
+placeholder_path = tk.StringVar(window, value="app/imgs/placeholder.png")
 
 ph_img = import_image(placeholder_path.get(), 200)
 placeholder = tk.Label(img_selection_frame,
