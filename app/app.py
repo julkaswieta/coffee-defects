@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from app_helpers import *
-import os
 import threading
 
 window_width = 800
@@ -51,7 +50,7 @@ title.grid(row=0, column=1, padx=main_frames_padding)
 
 # Instructions
 instructions = tk.Label(
-    header_frame, text="Instructions will be in here", bg="#d1c4ab")
+    header_frame, text="Upload image of your beans and then press 'Detect defects' to process the image.", bg="#d1c4ab", anchor="w")
 instructions.grid(row=1, column=1, pady=10, padx=10)
 
 # Body frame fill

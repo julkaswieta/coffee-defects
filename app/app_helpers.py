@@ -1,8 +1,7 @@
 from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import filedialog as fd
-from tkinter.messagebox import showinfo
-import time
+from detect import process_image
 import os
 
 
@@ -29,12 +28,16 @@ def select_image(placeholder, img_path):
         print("Couldn't load image")
 
 
-def detect_defects(img_path, output_frame):
-    time.sleep(5)  # replace this with an actual call to the detection
-    print(img_path)
-    print("detecting beans here")
+def clear_existing_output(output_path):
+    for file in os.listdir(output_path):
+        os.remove(os.path.join(output_path, file))
 
-    output_path = "C:\\Users\\julka\\repos\\coffee-defects\\outputs1732980065"
+
+def detect_defects(img_path, output_frame):
+    output_path = os.path.abspath("./detected")
+
+    clear_existing_output(output_path)
+    process_image(img_path, output_path)
 
     output_frame.after(0, lambda: update_gallery(output_frame, output_path))
 
@@ -59,10 +62,24 @@ def update_gallery(output_frame, output_path):
         img_display.image = photo
         img_display.grid(row=row, column=col, padx=10, pady=(0, 10))
 
-        img_label = tk.Label(output_frame, text=img_path, anchor="center")
+        img_label = tk.Label(
+            output_frame, text=select_label(img_path), anchor="center")
         img_label.grid(row=row+1, column=col, padx=10, pady=(0, 10))
 
         col += 1
         if col >= num_columns:
             col = 0
             row += 2
+
+
+def select_label(filename):
+    if "defect" in filename:
+        return "Defect"
+    elif "longberry" in filename:
+        return "Longberry"
+    elif "peaberry" in filename:
+        return "Peaberry"
+    elif "premium" in filename:
+        return "Premium bean"
+    else:
+        return "Unknown"

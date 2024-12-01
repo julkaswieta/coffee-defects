@@ -4,3 +4,4 @@ yolov8m-cls.pt
 outputs*
 runs
 *pycache*
+detected
