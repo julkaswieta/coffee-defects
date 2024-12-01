@@ -3,10 +3,7 @@ import os
 import cv2
 import time
 
-# Upload image
-image_path = "datasets/multiple_beans_test/multi-9-24.jpg"
-output_folder = "outputs" + str(int(time.time()))
-detect_model = YOLO("models/bean_defect_detect.pt")
+detect_model = YOLO("models/defect_detect_yolo.pt")
 classify_model = YOLO("models/defect_classify_yolo.pt")
 
 
@@ -15,7 +12,7 @@ def detect_beans(model, image, imgsz):
     return model.predict(image, agnostic_nms=True, imgsz=imgsz)
 
 
-def crop_beans(results):
+def crop_beans(results, img_path):
     # Code from: https://github.com/ultralytics/ultralytics/issues/5097
     result = results[0]
 
@@ -25,7 +22,7 @@ def crop_beans(results):
     classes = boxes.cls.tolist()
 
     # crop the image into predicted objects
-    img = cv2.imread(image_path)
+    img = cv2.imread(img_path)
     os.makedirs(output_folder, exist_ok=True)
 
     # Iterate through the bounding boxes
@@ -56,7 +53,16 @@ def process_single_beans():
         print(item)
 
 
-results = detect_beans(detect_model, image_path, 1024)
-results[0].show()
-crop_beans(results)
-# process_single_beans()
+images_to_detect = ["multi-9-2.jpg", "multi-9-9.jpg", "multi-9-16.jpg", "multi-9-23.jpg", "multi-9-30.jpg",
+                    "multi-16-2.jpg", "multi-16-9.jpg", "multi-16-16.jpg", "multi-16-23.jpg", "multi-16-30.jpg",
+                    "multi-25-2.jpg", "multi-25-9.jpg", "multi-25-16.jpg", "multi-25-23.jpg", "multi-25-30.jpg"]
+
+# images_to_detect = ["multi-25-2.jpg", "multi-16-4.jpg"]
+
+input_folder = "datasets\multiple_beans_test"
+
+for img in images_to_detect:
+    output_folder = "outputs_" + img.replace(".jpg", "")
+    img_path = os.path.join(input_folder, img)
+    result = detect_beans(detect_model, img_path, 1024)
+    crop_beans(result, img_path)
