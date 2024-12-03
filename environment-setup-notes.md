@@ -3,4 +3,7 @@ To run the training on a machine with an Nvidia GPU, it's best to set up a conda
 - conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 - conda install conda-forge::ultralytics
 
-For running the app, just an environment with Ultralytics installed should be enough
+For running the app, just a Python environment with Ultralytics installed should be enough
+
+## To run the app: 
+Run the app.py script in the app folder
