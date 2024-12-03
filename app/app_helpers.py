@@ -29,8 +29,9 @@ def select_image(placeholder, img_path):
 
 
 def clear_existing_output(output_path):
-    for file in os.listdir(output_path):
-        os.remove(os.path.join(output_path, file))
+    if os.path.exists(output_path):
+        for file in os.listdir(output_path):
+            os.remove(os.path.join(output_path, file))
 
 
 def detect_defects(img_path, output_frame):
